@@ -4,6 +4,7 @@ add_library(asteroid SHARED
     watch.cpp
     watchconnection.cpp
     scanner.cpp
+    services/common.h
     services/batteryservice.cpp
     services/mediaservice.cpp
     services/notificationservice.cpp
