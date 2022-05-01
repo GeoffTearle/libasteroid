@@ -29,27 +29,11 @@ void NotificationService::onServiceDiscovered()
         emit ready();
 }
 
-bool NotificationService::insertNotification(QString packageName, unsigned int id, QString appName, QString icon, QString summary, QString body, Vibrate vibrate)
+bool NotificationService::insertNotification(QString packageName, unsigned int id, QString appName, QString icon, QString summary, QString body, QString vibrate)
 {
     if(m_service && m_updateChrc.isValid()) {
-        QString vibrateStr;
-        switch(vibrate) {
-        case Ringtone:
-            vibrateStr = "ringtone";
-            break;
-        case Strong:
-            vibrateStr = "strong";
-            break;
-        case Normal:
-            vibrateStr = "normal";
-            break;
-        case None:
-            vibrateStr = "none";
-            break;
-        }
-
         QByteArray data = QString("<insert><pn>%1</pn><id>%2</id><an>%3</an><ai>%4</ai><su>%5</su><bo>%6</bo><vb>%7</vb></insert>")
-                .arg(packageName, QString::number(id), appName, icon, summary, body, vibrateStr).toUtf8();
+                .arg(packageName, QString::number(id), appName, icon, summary, body, vibrate).toUtf8();
 
         m_service->writeCharacteristic(m_updateChrc, data, QLowEnergyService::WriteWithoutResponse);
         return true;
@@ -65,19 +49,4 @@ bool NotificationService::removeNotification(unsigned int id)
         return true;
     } else
         return false;
-}
-
-void NotificationService::setVibration(const QString v)
-{
-  if(v == "Strong")
-    m_vibrate = Strong;
-  else if( v == "Normal")
-    m_vibrate = Normal;
-  else
-    m_vibrate = None;
-}
-
-NotificationService::Vibrate NotificationService::getVibration()
-{
-    return m_vibrate;
 }
